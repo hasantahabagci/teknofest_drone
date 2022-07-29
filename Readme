@@ -1,0 +1,7 @@
+1-Telemetriyi sanal makinaya bağladığından emin ol.
+2-Terminalden usbye izin ver. 		sudo chmod 666 /dev/ttyUSB0
+3-Kod çalıştırma sırası 
+	1-arm takeoff
+	2-basit sağ sol hareket 
+	3-Teknofest yazdirma 
+	4-simple goto
