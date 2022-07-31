@@ -11,14 +11,16 @@ connection_string = "/dev/ttyUSB0"
 
 iha = connect(connection_string, wait_ready=True, timeout=100, baud=57600)
 
+ccopter_horizontal_velocity=70
+copter_vertical_velocity=70
+iha.parameters.set("WP_YAW_BEHAVIOR",0)#bir yere giderken aciyi degistirmiyor.
+iha.parameters.set("WPNAV_SPEED",copter_horizontal_velocity)
+iha.parameters.set("WPNAV_SPEED_UP",copter_vertical_velocity)
+
 yazi = "T"
-# yazi = input()
-iha.parameters.set("WPNAV_SPEED",90)
 font = 4  # metre
-iki_harf_arasi_bosluk = font / 5
-delay = font * 2 - 1
-iha.parameters.set("WPNAV_SPEED",50)
-iha.parameters.set("WPNAV_SPEED_UP",50)
+iki_harf_arasi_bosluk = font / 2
+delay=2
 def get_location_metres(original_location, dNorth, dEast):
     earth_radius = 6378137.0  # Radius of "spherical" earth
     # Coordinate offsets in radians
@@ -49,8 +51,7 @@ def distance_control(array):
         targetLocation = get_location_metres(currentLocation, 0, array[0])
         targetDistance = get_distance_metres(currentLocation, targetLocation)
         print("Initial distance: ", targetDistance)
-        while iha.mode == "GUIDED":  # Stop action if we are no longer in guided mode.
-            # print "DEBUG: mode: %s" % vehicle.mode.name
+        while iha.mode == "GUIDED":
             remainingDistance = get_distance_metres(iha.location.global_relative_frame, targetLocation)
             print("Distance to target: ", remainingDistance)
             if remainingDistance <= targetDistance * 0.08:  # Just below target, in case of undershoot.
@@ -163,123 +164,124 @@ def arm_ol_ve_yuksel(hedef_yukseklik):  # iha ilk harfi yazdirmak icin arm olup 
     while iha.location.global_relative_frame.alt <= hedef_yukseklik * 0.99:
         print("Su anki yukseklik{}".format(iha.location.global_relative_frame.alt))
         time.sleep(0.5)
+    print("Su anki yukseklik{}".format(iha.location.global_relative_frame.alt))
     print("Takeoff gerceklesti")
 
 arm_ol_ve_yuksel(5)
 time.sleep(2)
 
 
-# Array Values = [x ekseni, y ekseni, z ekseni, yaw rate(kendi ekseni etrafında), işaretçi]
+# Array Values = [x ekseni, y ekseni, z ekseni, işaretçi]
 
-position_array_T = [[font, 0, 0, 0, 1],
-                    [-font / 2, 0, 0, 0, 0],
-                    [0, 0, font, 0, 1],
-                    [font / 2, 0, -font, 0, 0]]
+position_array_T = [[font,0 , 0, 1],
+                    [-font / 2, 0, 0, 0],
+                    [0, 0, font, 1],
+                    [font / 2, 0,-font,0]]
 
-position_array_E = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],  # Harflerin arasında boşluk olması için
-                    [0, 0, font, 0, 1],
-                    [font / 2, 0, 0, 0, 1],
-                    [0, 0, -font / 2, 0, 0],
-                    [-font / 2, 0, 0, 0, 1],
-                    [0, 0, -font / 2, 0, 0],
-                    [font / 2, 0, 0, 0, 1]]
+position_array_E = [[iki_harf_arasi_bosluk, 0, 0, 0],  # Harflerin arasında boşluk olması için
+                    [0, 0, font, 1],
+                    [font / 2, 0, 0, 1],
+                    [0, 0, -font / 2,0],
+                    [-font / 2, 0, 0, 1],
+                    [0, 0, -font / 2, 0],
+                    [font / 2, 0, 0, 1]]
 
-position_array_K = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [0, 0, font, 0, 1],
-                    [font / 2, 0, 0, 0, 0],
-                    [-font / 2, 0, -font / 2, 0, 1],
-                    [font / 2, 0, -font / 2, 0, 1]]
+position_array_K = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [0, 0, font, 1],
+                    [font / 2, 0, 0, 0],
+                    [-font / 2, 0, -font / 2, 1],
+                    [font / 2, 0, -font / 2, 1]]
 
-position_array_N = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [0, 0, font, 0, 1],
-                    [0, 0, -font, 0, 0],
-                    [font / 2, 0, font, 0, 1],
-                    [0, 0, -font, 0, 1]]
+position_array_N = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [0, 0, font,1],
+                    [0, 0, -font, 0],
+                    [font / 2, 0, font, 1],
+                    [0, 0, -font, 1]]
 
-position_array_O = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [0, 0, font, 0, 1],
-                    [font / 2, 0, 0, 0, 1],
-                    [0, 0, -font, 0, 1],
-                    [-font / 2, 0, 0, 0, 1],
-                    [font / 2, 0, 0, 0, 0]]
+position_array_O = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [0, 0, font, 1],
+                    [font / 2, 0, 0, 1],
+                    [0, 0, -font,  1],
+                    [-font / 2, 0, 0, 1],
+                    [font / 2, 0, 0, 0]]
 
-position_array_F = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [0, 0, font, 0, 1],
-                    [0, 0, -font / 2, 0, 0],
-                    [font / 4, 0, 0, 0, 1],
-                    [-font / 4, 0, -font / 2, 0, 0],
-                    [font / 2, 0, 0, 0, 1]]
+position_array_F = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [0, 0, font, 1],
+                    [0, 0, -font / 2, 0],
+                    [font / 4, 0, 0, 1],
+                    [-font / 4, 0, -font / 2, 0],
+                    [font / 2, 0, 0, 1]]
 
-position_array_S = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [0, 0, font, 0, 0],
-                    [font / 2, 0, 0, 0, 1],
-                    [0, 0, -font / 2, 0, 1],
-                    [-font / 2, 0, -0, 0, 1],
-                    [0, 0, -font / 2, 0, 1],
-                    [font / 2, 0, 0, 0, 1]]
+position_array_S = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [0, 0, font, 0],
+                    [font / 2, 0, 0, 1],
+                    [0, 0, -font / 2, 1],
+                    [-font / 2, 0, -0, 1],
+                    [0, 0, -font / 2, 1],
+                    [font / 2, 0, 0, 1]]
 
-position_array_2 = [[iki_harf_arasi_bosluk, 0, 0, 0, 0],
-                    [font / 2, 0, 0, 0, 1],
-                    [0, 0, font / 2, 0, 1],
-                    [-font / 2, 0, 0, 0, 1],
-                    [0, 0, font / 2, 0, 1],
-                    [font / 2, 0, 0, 0, 1],
-                    [0, 0, -font, 0, 0]]
+position_array_2 = [[iki_harf_arasi_bosluk, 0, 0, 0],
+                    [font / 2, 0, 0, 1],
+                    [0, 0, font / 2, 1],
+                    [-font / 2, 0, 0, 1],
+                    [0, 0, font / 2, 1],
+                    [font / 2, 0, 0, 1],
+                    [0, 0, -font, 0]]
 
 
 for i in yazi:
     if i == "T" or i == "t":
         for i in position_array_T:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             distance_control(i)
         print("T yazdırma işlemi tamamlandı.")
 
     if i == "E" or i == "e":
         for i in position_array_E:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("E yazdırma işlemi tamamlandı.")
 
     if i == "K" or i == "k":
         for i in position_array_K:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("K yazdırma işlemi tamamlandı.")
 
     if i == "N" or i == "n":
         for i in position_array_N:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("N yazdırma işlemi tamamlandı.")
 
     if i == "O" or i == "o" or i == "0":
         for i in position_array_O:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("O yazdırma işlemi tamamlandı.")
 
     if i == "F" or i == "f":
         for i in position_array_F:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("F yazdırma işlemi tamamlandı.")
 
     if i == "S" or i == "s":
         for i in position_array_S:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("S yazdırma işlemi tamamlandı.")
 
     if i == "2":
         for i in position_array_2:
-            nozzle_on_off(i[4])
+            nozzle_on_off(i[3])
             position_and_nozzle_control(i)
             time.sleep(delay)
         print("2 yazdırma işlemi tamamlandı.")
