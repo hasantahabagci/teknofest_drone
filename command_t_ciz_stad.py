@@ -42,39 +42,45 @@ def takeoff(irtifa):
         time.sleep(1)
     print("Su anki yukseklik{}".format(iha.location.global_relative_frame.alt))
     print("Takeoff gerceklesti")
-#orman rastgele 3 konum
-#1 : 41.129641, 28.997460   3-1:7 metre
-#2 : 41.129564, 28.997433   1-2:9 metre
-#3 : 41.129605, 28.997528   2-3:9 metre
 
 def gorev_ekle():
     global komut
     komut = iha.commands
-    # send command to vehicl
+    # send command to vehicle
     time=3
     # TAKEOFF
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0,
-                0, 0, 0, 0, 6))
-    #waypoint orman
+                0, 0, 0, 0, 8))
+    #waypoint stad
+    #konum1
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129637, 28.997481, 8))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0,time,
+                0, 0, 0, 41.101579, 29.023312,8, 8))
+
+    #konum2
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999990154,  28.997528635991813, 8))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0,time,
+                0, 0, 0, 41.10157899999016, 29.0233596157126,8))
+
+    #konum3
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696,28.997504817995907, 8))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,0, 0, time,
+                0, 0, 0, 41.1015789999877, 29.023335807856302,8))
+
+    #konum4
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696, 28.997504817995907, 4))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,0, 0, time,
+                0, 0, 0, 41.1015789999877, 29.023335807856302,4))
+    #konum5
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999990154,  28.997528635991813, 8))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,0, 0, time,
+                0, 0, 0, 41.10157899999016, 29.0233596157126,8))
+    #konum6
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696, 28.99755245398772, 8))
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT,0, 0, time,
+                0, 0, 0, 41.1015789999877, 29.023383423568898,8))
+
     # RTL
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0,
@@ -85,7 +91,7 @@ def gorev_ekle():
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0,
                 0, 0, 0, 0, 0, 0, 0, 0))
 
-takeoff(3)
+#takeoff(3)
 
 gorev_ekle()
 

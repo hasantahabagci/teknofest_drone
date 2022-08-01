@@ -3,14 +3,17 @@ import time
 from pymavlink import mavutil
 import math
 #connection_string = "127.0.0.1:14550"
-connection_string = "/dev/ttyUSB0"
+#connection_string = "/dev/ttyUSB0"
+connection_string = "/dev/ttyACM0"
 iha = connect(connection_string,wait_ready=True, timeout=100, baud=57600)
 
 copter_horizontal_velocity=70
 copter_vertical_velocity=70
+copter_vertical2_velocity=70 #inis
 iha.parameters.set("WP_YAW_BEHAVIOR",0)#bir yere giderken aciyi degistirmiyor.
 iha.parameters.set("WPNAV_SPEED",copter_horizontal_velocity)
 iha.parameters.set("WPNAV_SPEED_UP",copter_vertical_velocity)
+iha.parameters.set("WPNAV_SPEED_DN",copter_vertical2_velocity)
 print("iha yatay hizi:{} iha kalkis hizi: {}".format(copter_horizontal_velocity,copter_vertical_velocity))
 
 font=4
@@ -58,11 +61,11 @@ def basic_movements(x,y): #sadece bir degiskene 0 dan farkli gir.
     konum_1=iha.location.global_relative_frame
     if (x!=0):
         if(x<0):
-            wait_time=math.ceil( (x*-1*100)/copter_horizontal_velocity)+3
+            wait_time=math.ceil( (x*-1*100)/copter_horizontal_velocity)+4
             print("Wait time = {}".format(wait_time))
             print("{} metre geri gidiyorum...".format(x)) #x ekseni dronun onu
         else:
-            wait_time = math.ceil( (x * 100) / copter_horizontal_velocity) + 3
+            wait_time = math.ceil( (x * 100) / copter_horizontal_velocity) + 4
             print("{} metre one gidiyorum...".format(x))
         basic_position(x, 0, 0)
         time.sleep(wait_time)
@@ -75,10 +78,10 @@ def basic_movements(x,y): #sadece bir degiskene 0 dan farkli gir.
             print("{} metre one gittim.".format(mesafe))
     else:
         if(y<0):
-            wait_time = math.ceil((y * -1 * 100) / copter_horizontal_velocity) + 3
+            wait_time = math.ceil((y * -1 * 100) / copter_horizontal_velocity) + 4
             print("{} metre sola gidiyorum...".format(y))
         else:
-            wait_time = math.ceil((y * 100) / copter_horizontal_velocity) + 3
+            wait_time = math.ceil((y * 100) / copter_horizontal_velocity) + 4
             print("{} metre saga gidiyorum...".format(y))
         basic_position(0, y, 0)
         time.sleep(wait_time)
@@ -97,7 +100,7 @@ def t_yaz():
     print("T yaziyorum")
 
     basic_position(0,font,0)
-    wait_time = math.ceil((font * 100) / copter_horizontal_velocity) + 3
+    wait_time = math.ceil((font * 100) / copter_horizontal_velocity) + 4
     print("{} metre saga gidiyorum...".format(font))
     print("{} saniye bekleyecegim.".format(wait_time))
     time.sleep(wait_time)
@@ -110,7 +113,7 @@ def t_yaz():
 
     konum_1 = iha.location.global_relative_frame
     basic_position(0,-font/2,0)
-    wait_time = math.ceil((font * 50) / copter_horizontal_velocity) + 3
+    wait_time = math.ceil((font * 50) / copter_horizontal_velocity) + 4
     print("{} metre sola gidiyorum...".format(font/2))
     print("{} saniye bekleyecegim.".format(wait_time))
     time.sleep(wait_time)
@@ -124,7 +127,7 @@ def t_yaz():
 
     alt_1=iha.location.global_relative_frame.alt
     basic_position(0,0,font)
-    wait_time = math.ceil((font * 100) / copter_horizontal_velocity) + 3
+    wait_time = math.ceil((font * 100) / copter_horizontal_velocity) + 4
     print("{} metre asagi gidiyorum...".format(font))
     print("{} saniye bekleyecegim.".format(wait_time))
     time.sleep(wait_time)
@@ -138,7 +141,7 @@ def t_yaz():
     alt_1=iha.location.global_relative_frame.alt
     konum_1 = iha.location.global_relative_frame
     basic_position(0,font/2,-font)
-    wait_time = math.ceil((font * 100) / copter_vertical_velocity) + 3
+    wait_time = math.ceil((font * 100) / copter_vertical_velocity) + 4
     print("{} metre saga {} metre yukari gidiyorum...".format(font/2,font))
     print("{} saniye bekleyecegim.".format(wait_time))
     time.sleep(wait_time)
@@ -155,8 +158,29 @@ def t_yaz():
 
 arm_ol_ve_yuksel(6)
 time.sleep(2)
-#basic_movements(3,0)  #x dronun onu arkasi y dronun sagi solu
-t_yaz()
+basic_movements(4,0)  #x dronun onu arkasi y dronun sagi solu
+basic_movements(-4,0)
+basic_movements(0,4)
+basic_movements(0,-4)
+
+x=4
+time_2=math.ceil( x*100/copter_vertical_velocity) +4
+
+basic_position(0,0,-x)   #4metre yukseliyor.
+print("{} metre yukseliyorum".format(x))
+time.sleep(time_2)
+print("Global Location (relative altitude): %s" % iha.location.global_relative_frame)
+print("Altitude relative to home_location: %s" % iha.location.global_relative_frame.alt)
+print("Local Location: %s" % iha.location.local_frame)
+
+basic_position(0,0,x)#10metre alcaliyor.
+print("{} metre alcaliyorum".format(x))
+time.sleep(time_2)
+print("Global Location (relative altitude): %s" % iha.location.global_relative_frame)
+print("Altitude relative to home_location: %s" % iha.location.global_relative_frame.alt)
+print("Local Location: %s" % iha.location.local_frame)
+#basic_movements(0,3)  #x dronun onu arkasi y dronun sagi solu
+#t_yaz()
 iha.mode="LAND"
 
 

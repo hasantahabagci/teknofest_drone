@@ -53,31 +53,26 @@ def arm_ol_ve_yuksel(hedef_yukseklik):
     print("Altitude relative to home_location: %s" % iha.location.global_relative_frame.alt)
     print("Local Location: %s" % iha.location.local_frame)
 
-
-#simulasyon icin  yonunu cevirdiginde duzeltsin diye
-"""arm_ol_ve_yuksel(6)
-konum_1=LocationGlobalRelative(iha.location.global_relative_frame.lat,iha.location.global_relative_frame.lon,iha.location.global_relative_frame.alt)
-konum_2=LocationGlobalRelative(-35.36291020,149.16513715,6)
-heading=get_bearing(konum_1,konum_2)
-print (iha.heading)
-condition_yaw(iha.heading,False)
-print("Heading is : {}".format(heading))
-#iha.simple_goto(konum_2)
-mesafe=get_distance_metres(konum_1,konum_2)
-print ("iki konum arasi mesafe: {}".format(mesafe))
-wait_time=math.ceil(mesafe*100/copter_horizontal_velocity) + 3
-time.sleep(wait_time)
-condition_yaw(heading,False) #false saat yonunun tersine True saat yonunde"""
-
 arm_ol_ve_yuksel(4)
 konum_1=LocationGlobalRelative(iha.location.global_relative_frame.lat,iha.location.global_relative_frame.lon,iha.location.global_relative_frame.alt)
-#konum_2=LocationGlobalRelative(41.129313, 28.997534,8) #orman
-konum_3=LocationGlobalRelative(41.101579, 29.023312,8) #stad1
-konum_4=LocationGlobalRelative(41.101486, 29.023200,8) #stad2
-konum_5=LocationGlobalRelative(41.101453, 29.023438,8) #stad3
-konum_6=LocationGlobalRelative(41.101579, 29.023312,8) #stad4
+konum_2=LocationGlobalRelative(41.101579, 29.023312,8) #baslangic
+konum_3=LocationGlobalRelative(41.10157899999016, 29.0233596157126,8) #4 metre sag
+konum_4=LocationGlobalRelative(41.1015789999877, 29.023335807856302,8)#2 metre sol
+konum_5=LocationGlobalRelative(41.1015789999877, 29.023335807856302,4) #4 metre asagi
+konum_6=LocationGlobalRelative(41.10157899999016, 29.0233596157126,8) #4 metre sag olan konuma gitme
+konum_7=LocationGlobalRelative(41.1015789999877, 29.023383423568898,8) #2 metre bosluk ve diger harf
 
-mesafe=get_distance_metres(konum_1,konum_3)
+print("T CIZMEYE BASLIYORUM")
+
+mesafe=get_distance_metres(konum_1,konum_2)
+print ("iki konum arasi mesafe: {}".format(mesafe))
+print ("Belirtilen konuma gidiyorum...")
+iha.simple_goto(konum_2)
+wait_time=math.ceil(mesafe*100/copter_horizontal_velocity) + 3
+time.sleep(wait_time)
+print("Belirtilen konuma ulastim.")
+
+mesafe=get_distance_metres(konum_2,konum_3)
 print ("iki konum arasi mesafe: {}".format(mesafe))
 print ("Belirtilen konuma gidiyorum...")
 iha.simple_goto(konum_3)
@@ -109,10 +104,13 @@ wait_time=math.ceil(mesafe*100/copter_horizontal_velocity) + 3
 time.sleep(wait_time)
 print("Belirtilen konuma ulastim.")
 
+mesafe=get_distance_metres(konum_6,konum_7)
+print ("iki konum arasi mesafe: {}".format(mesafe))
+print ("Belirtilen konuma gidiyorum...")
+iha.simple_goto(konum_7)
+wait_time=math.ceil(mesafe*100/copter_horizontal_velocity) + 3
+time.sleep(wait_time)
+print("Belirtilen konuma ulastim.")
 
-
+print("T CIZMEYI BITIRDIM INISE GECEIYORUM..")
 iha.mode="LAND"
-
-
-#konum = LocationGlobalRelative(41.101374, 29.023356,8) #stadyum
-#konum = LocationGlobalRelative(41.1031276,29.0320731, 4) #eko yapi

@@ -4,20 +4,21 @@ import time
 import math
 from pymavlink import mavutil
 
-# import Jetson.GPIO as gpio
-
-connection_string = "/dev/ttyUSB0"
 #connection_string = "127.0.0.1:14550"
+#connection_string = "/dev/ttyUSB0"
+connection_string = "/dev/ttyACM0"
+iha = connect(connection_string,wait_ready=True, timeout=100, baud=57600)
 
-iha = connect(connection_string, wait_ready=True, timeout=100, baud=57600)
-
-ccopter_horizontal_velocity=70
+copter_horizontal_velocity=70
 copter_vertical_velocity=70
+copter_vertical2_velocity=70 #inis
 iha.parameters.set("WP_YAW_BEHAVIOR",0)#bir yere giderken aciyi degistirmiyor.
 iha.parameters.set("WPNAV_SPEED",copter_horizontal_velocity)
 iha.parameters.set("WPNAV_SPEED_UP",copter_vertical_velocity)
+iha.parameters.set("WPNAV_SPEED_DN",copter_vertical2_velocity)
+print("iha yatay hizi:{} iha kalkis hizi: {}".format(copter_horizontal_velocity,copter_vertical_velocity))
 
-yazi = "T"
+yazi = "TEK"
 font = 4  # metre
 iki_harf_arasi_bosluk = font / 2
 delay=2
@@ -241,49 +242,49 @@ for i in yazi:
         for i in position_array_E:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("E yazdırma işlemi tamamlandı.")
 
     if i == "K" or i == "k":
         for i in position_array_K:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("K yazdırma işlemi tamamlandı.")
 
     if i == "N" or i == "n":
         for i in position_array_N:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("N yazdırma işlemi tamamlandı.")
 
     if i == "O" or i == "o" or i == "0":
         for i in position_array_O:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("O yazdırma işlemi tamamlandı.")
 
     if i == "F" or i == "f":
         for i in position_array_F:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("F yazdırma işlemi tamamlandı.")
 
     if i == "S" or i == "s":
         for i in position_array_S:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("S yazdırma işlemi tamamlandı.")
 
     if i == "2":
         for i in position_array_2:
             nozzle_on_off(i[3])
             position_and_nozzle_control(i)
-            time.sleep(delay)
+            distance_control(i)
         print("2 yazdırma işlemi tamamlandı.")
 
 print('Return to launch')
@@ -294,6 +295,3 @@ while (iha.mode!= "RTL"):
 print("Close iha object")
 iha.close()
 
-"""
-Delay ortadan kaldırılacak, konuma göre kod içerisinde bekleme yapılacak
-"""

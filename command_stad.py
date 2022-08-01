@@ -1,7 +1,6 @@
-from dronekit import Command, connect, VehicleMode, LocationGlobalRelative
+from dronekit import Command, connect, VehicleMode
 import time
 from pymavlink import mavutil
-
 #connection_string = "127.0.0.1:14550"
 #connection_string = "/dev/ttyUSB0"
 connection_string = "/dev/ttyACM0"
@@ -42,48 +41,56 @@ def takeoff(irtifa):
         time.sleep(1)
     print("Su anki yukseklik{}".format(iha.location.global_relative_frame.alt))
     print("Takeoff gerceklesti")
-#orman rastgele 3 konum
-#1 : 41.129641, 28.997460   3-1:7 metre
-#2 : 41.129564, 28.997433   1-2:9 metre
-#3 : 41.129605, 28.997528   2-3:9 metre
 
+#stad konumlari
+#41.101579, 29.023312 baslangic
+#41.101486, 29.023200 durak1  1-2: 14metre
+#41.101453, 29.023438 durak2  2-3: 20metre
+#41.101579, 29.023312 bitis=baslangic
 def gorev_ekle():
     global komut
     komut = iha.commands
-    # send command to vehicl
+    # send command to vehicle
     time=3
     # TAKEOFF
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0,
-                0, 0, 0, 0, 6))
-    #waypoint orman
+                0, 0, 0, 0, 10))
+
+    #waypoint stad
+    #konum1
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129637, 28.997481, 8))
+                0, 0, 0, 41.101579, 29.023312, 10))
+    #konum2
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999990154,  28.997528635991813, 8))
+                0, 0, 0, 41.101486, 29.023200, 10))
+    #konum3
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696,28.997504817995907, 8))
+                0, 0, 0, 41.129605, 28.997528, 10))
+    #konum4
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696, 28.997504817995907, 4))
+                0, 0, 0, 41.101579, 29.023312, 10))
+    #inis
     komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999990154,  28.997528635991813, 8))
-    komut.add(
-        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, time,
-                0, 0, 0, 41.129636999987696, 28.99755245398772, 8))
-    # RTL
+        Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, time,
+                0,0, 0, 0, 0, 0))
+    """ #RTL
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0,
-                0, 0, 0, 0, 0, 0, 0, 0))
+                0, 0, 0, 0, 0, 0, 0, 0))"""
 
     # DOgRULAMA
     komut.add(
         Command(0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_RETURN_TO_LAUNCH, 0,
                 0, 0, 0, 0, 0, 0, 0, 0))
+
+    komut.upload()
+    print("Komutlar yukleniyor...")
+
 
 takeoff(3)
 
@@ -103,5 +110,5 @@ while True:
         print("Gorev bitti.")
         break
 
-print("T cizdim")
+print("Donguden cikildi.")
 
